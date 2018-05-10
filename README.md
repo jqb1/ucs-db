@@ -12,10 +12,10 @@
 ### relations
 
 **1** (rhs) **to many** (lhs):
-account.person_id       ->  person.id
-transaction.account_id  ->  account.id
+- account.person_id       ->  person.id
+- transaction.account_id  ->  account.id
 
 **1 to 1**:
-account.card_id         ->  card.id
-transaction.car_id      ->  car.id 
+- account.card_id         ->  card.id
+- transaction.car_id      ->  car.id 
 
