@@ -1,4 +1,7 @@
+CREATE DATABASE used_cars_store;
+
 USE used_cars_store;
+
 CREATE TABLE car(id smallint not null auto_increment,
 brand varchar(20) not null,
 model varchar(30) not null,
@@ -14,13 +17,10 @@ email varchar(50) not null,
 phone_number int(9) not null,
 primary key(id));
 
-
 CREATE TABLE card(id smallint not null auto_increment,
 number int,
 expenses int,
 primary key(id));
-
-
 
 CREATE TABLE account(id smallint not null auto_increment,
 person_id smallint not null,
@@ -42,3 +42,4 @@ execution_date date not null,
 primary key(id),
 foreign key(id) references account(id),
 foreign key(id) references car(id));
+

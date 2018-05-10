@@ -18,24 +18,20 @@ systemctl start mysqld
 
 # Very secure way of storing a passwords.
 ROOT_PASSWORD=
-COMMON_PASSWORD=
 
+# Create database before password assigned.
+mysql -u root < ./used_cars_store.sql
+
+# Set up password, able remote connection,
+# and remove unnecessary things.
 mysql -u root -e "$(cat << END
 UPDATE mysql.user SET Password=PASSWORD('${ROOT_PASSWORD}') WHERE User='root';
 DELETE FROM mysql.user WHERE User='';
 DROP DATABASE IF EXISTS test;
 DELETE FROM mysql.db WHERE Db='test' OR Db='test\\\\_%';
 
-CREATE DATABASE used_cars_store;
-
 CREATE USER 'root'@'%' IDENTIFIED BY '${ROOT_PASSWORD}';
 GRANT ALL PRIVILEGES ON *.* TO 'root'@'%';
-
-CREATE USER 'deren'@'%' IDENTIFIED BY '${COMMON_PASSWORD}';
-GRANT ALL ON used_cars_store.* TO 'deren' IDENTIFIED BY 'admin1';
-
-CREATE USER 'koziol'@'%' IDENTIFIED BY '${COMMON_PASSWORD}';
-GRANT ALL ON used_cars_store.* TO 'koziol' IDENTIFIED BY 'admin1';
 
 FLUSH PRIVILEGES;
 END

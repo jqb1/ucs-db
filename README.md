@@ -2,7 +2,7 @@
 
 | Entity      | Attributes                                                              |
 | ----------- | ----------------------------------------------------------------------- |
-| person      | id, name, surname, email, address                                       |
+| person      | id, name, surname, email, phone_number                                  |
 | account     | id, person_id, card_id, username, password, creation_date, last_visit   |
 | card        | id, number, expenses                                                    |
 | transaction | id, account_id, car_id, execution_date                                  |
