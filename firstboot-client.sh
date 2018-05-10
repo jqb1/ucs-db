@@ -6,7 +6,7 @@
 apt-get install mysql-client -y 
 
 SQL_SERVER='35.176.206.51'
-echo "${SQL_SERVER} sql-server" >> /etc/hosts
+echo "${SQL_SERVER} sql" >> /etc/hosts
 
 echo 'To connect to the database, use: mysql -u username -p -h sql.'
 
