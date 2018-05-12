@@ -1,0 +1,10 @@
+<!Doctype html>
+        {%if brand %}
+        <h1>Available {{brand}} cars:</h1>
+        {%else%}
+        <h1>All cars:</h1>
+        {%endif%}
+
+        {% for car in cars_data%}
+            <li>car.brand,  car.model</li>
+        {%endfor%}

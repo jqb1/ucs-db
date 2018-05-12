@@ -1,4 +1,4 @@
-from flask import Flask,jsonify
+from flask import Flask,jsonify,request,render_template
 import pymysql
 app=Flask("Hello app")
 
@@ -13,12 +13,16 @@ db=pymysql.connect("35.176.206.50","koziol","admin1","used_cars_store")
 
 
 
-@app.route('/',methods=['GET'])
-def index():
+@app.route('/hello/')
+@app.route('/hello/<brand>')
+def list_cars(brand=None):
     cursor=db.cursor()
-    sql="SELECT * FROM car"
+    if brand:
+        sql="SELECT * FROM car WHERE brand=%s"%brand
+    else:
+        sql="SELECT * FROM car"
     cursor.execute(sql) 
-    data=cursor.fetchall()
-    return jsonify(data) 
+    cars_data=cursor.fetchall()
+    return render_template('list_cars.html',brand=brand,cars_data=cars_data)
 if "__name__"=="__main__":
     app.run(debug=True)
