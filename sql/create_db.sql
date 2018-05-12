@@ -32,14 +32,14 @@ last_visit datetime,
 privilege enum('admin', 'user'),
 check(password>=8),
 primary key(id),
-foreign key(id) references person(id),
-foreign key(id) references card(id));
+foreign key(person_id) references person(id),
+foreign key(card_id) references card(number));
 
 CREATE TABLE transaction(id smallint not null auto_increment,
 account_id smallint,
 car_id smallint not null,
 execution_date date not null,
 primary key(id),
-foreign key(id) references account(id),
-foreign key(id) references car(id));
+foreign key(account_id) references account(id),
+foreign key(car_id) references car(id));
 
