@@ -14,8 +14,10 @@ mysql -u root < ./sql/clean_mysql_server.sql
 mysql -u root < ./sql/create_ucs_database.sql
 # mysql -u root < ./sql/init_ucs_database.sql
 
+MYSQL_ROOT_PASSWORD=admin1
+
 mysql -u root -e "$(cat << END
-CREATE USER 'root'@'%' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}'
+CREATE USER 'root'@'%' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';
 GRANT ALL PRIVILEGES ON *.* TO 'root'@'%';
 UPDATE mysql.user SET Password=PASSWORD('${MYSQL_ROOT_PASSWORD}') WHERE User='root';
 FLUSH PRIVILEGES
