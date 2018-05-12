@@ -10,9 +10,9 @@ yum install mysql-server -y
 
 systemctl start mysqld
 
-mysql -u root < ./sql/clean_mysql_server.sql
-mysql -u root < ./sql/create_ucs_database.sql
-# mysql -u root < ./sql/init_ucs_database.sql
+mysql -u root < ./sql/clean_mysql.sql
+mysql -u root < ./sql/create_db.sql
+# mysql -u root < ./sql/init_db.sql
 
 MYSQL_ROOT_PASSWORD=admin1
 
