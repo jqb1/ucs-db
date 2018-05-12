@@ -18,7 +18,8 @@ email varchar(50) not null,
 phone_number int(9) not null,
 primary key(id));
 
-CREATE TABLE card(number int not null unique,
+CREATE TABLE card(id smallint not null auto_increment,
+number int not null unique,
 balance int,
 primary key(number));
 
@@ -33,7 +34,7 @@ privilege enum('admin', 'user'),
 check(password>=8),
 primary key(id),
 foreign key(person_id) references person(id),
-foreign key(card_id) references card(number));
+foreign key(card_id) references card(id));
 
 CREATE TABLE transaction(id smallint not null auto_increment,
 account_id smallint,
