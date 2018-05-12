@@ -21,7 +21,7 @@ primary key(id));
 CREATE TABLE card(id smallint not null auto_increment,
 number int not null unique,
 balance int,
-primary key(number));
+primary key(id));
 
 CREATE TABLE account(id smallint not null auto_increment,
 person_id smallint not null,
