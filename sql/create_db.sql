@@ -6,21 +6,21 @@ CREATE TABLE car(id smallint not null auto_increment,
 brand varchar(20) not null,
 model varchar(30) not null,
 mileage int unsigned not null,
-production_year date not null,
+year date not null,
 price float not null,
-img_url varchar(50) not null,
+img varchar(50) not null,
 primary key(id));
 
 CREATE TABLE person(id smallint not null auto_increment,
 name varchar(30) not null,
 surname varchar(30) not null,
 email varchar(50) not null,
-phone_number int(9) not null,
+phone varchar(50) not null,
 primary key(id));
 
 CREATE TABLE card(id smallint not null auto_increment,
-number int not null unique,
-balance int,
+number varchar(50) not null unique,
+balance float not null,
 primary key(id));
 
 CREATE TABLE account(id smallint not null auto_increment,

@@ -1,8 +1,8 @@
 from flask import Flask,jsonify,request,render_template
-import pymysql
-app=Flask("Hello app")
+import MySQLdb
+app=Flask(__name__)
 
-db=pymysql.connect("35.176.206.50","koziol","admin1","used_cars_store")
+db=MySQLdb.connect("35.176.206.50","koziol","admin1","used_cars_store")
 
 #Configure mysql
 
@@ -24,5 +24,5 @@ def list_cars(brand=None):
     cursor.execute(sql) 
     cars_data=cursor.fetchall()
     return render_template('list_cars.html',brand=brand,cars_data=cars_data)
-if "__name__"=="__main__":
+if __name__=="__main__":
     app.run(debug=True)
