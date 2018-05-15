@@ -24,15 +24,20 @@ FLUSH PRIVILEGES
 END
 )"
 
-#Add Centos repos.
-#Install docker.
-#Build image.
-#Run container.
+cat << 'END' > /etc/yum.repos.d/centos.repo
+[CentOS-extras]
+name=CentOS-7-Extras
+mirrorlist=http://mirrorlist.centos.org/?release=7&arch=$basearch&repo=extras&infra=$infra
+#baseurl=http://mirror.centos.org/centos/$releasever/extras/$basearch/
+gpgcheck=0
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+END
 
-#pushd app
+yum install docker -y
 
-#docker build -t app .
-#docker run -p 7777:80 app
+#docker build -t sql ./sql
+#docker run -p 3306:3306 -d sql
 
-#popd
+docker build -t app ./app # 500Mb
+docker run -p 7777:80 -d app
 
