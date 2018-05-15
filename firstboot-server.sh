@@ -24,3 +24,15 @@ FLUSH PRIVILEGES
 END
 )"
 
+#Add Centos repos.
+#Install docker.
+#Build image.
+#Run container.
+
+#pushd app
+
+#docker build -t app .
+#docker run -p 7777:80 app
+
+#popd
+
