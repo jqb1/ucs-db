@@ -39,5 +39,5 @@ yum install docker -y
 #docker run -p 3306:3306 -d sql
 
 docker build -t app ./app # 500Mb
-docker run -p 7777:80 -d app
+docker run -p 7777:80 -d -v ${PWD}/app:/app app
 

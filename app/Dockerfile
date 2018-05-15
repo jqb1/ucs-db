@@ -1,7 +1,7 @@
 FROM python:3.6.5-alpine3.7
 
 WORKDIR /app
-ADD . /app
+#ADD . /app
 
 RUN apk add --no-cache \
   libc-dev \
