@@ -1,10 +1,15 @@
-<!Doctype html>
-        {%if brand %}
-        <h1>Available {{brand}} cars:</h1>
-        {%else%}
-        <h1>All cars:</h1>
-        {%endif%}
+{% extends 'base.html' %}
 
-        {% for car in cars_data%}
-            <li>car.brand,  car.model</li>
-        {%endfor%}
+{% block content %}
+
+{% if brand %}
+    <h1>Available {{ brand }} cars:</h1>
+{% else %}
+    <h1>All cars:</h1>
+{% endif %}
+
+{% for car in cars_data %}
+    <li>{{ car }}</li>
+{% endfor %}
+
+{% endblock %}

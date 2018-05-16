@@ -2,41 +2,43 @@ import MySQLdb
 
 
 def connect(username, password, host="35.176.206.50", db="used_cars_store"):
-  return MySQLdb.connect( \
-    host=host,            \
-    user=username,        \
-    passwd=password,      \
-    db=db)
+    return MySQLdb.connect( \
+        host=host, \
+        user=username, \
+        passwd=password, \
+        db=db)
 
 
 def validate_user(db, username, password):
-  cursor = db.cursor()
+    cursor = db.cursor()
 
-  query = ("SELECT EXISTS(SELECT 1 FROM account WHERE " +
-    "username='{}' AND password='{}')".format(username, password))
-  cursor.execute(query)
+    query = ("SELECT EXISTS(SELECT 1 FROM account WHERE " +
+             "username='{}' AND password='{}')".format(username, password))
+    cursor.execute(query)
 
-  out = cursor.fetchone()
+    out = cursor.fetchone()
 
-  return out[0] != 0
+    return out[0] != 0
 
 
 def fetch_cars(db, filter=None):
-  cursor = db.cursor()
+    cursor = db.cursor()
 
-  query = ["SELECT * FROM car"]
+    query = ["SELECT * FROM car"]
 
-  if filter != None:
-    conditions = []
+    if filter != None:
+        conditions = []
 
-    for key, value, operator in filter:
-      conditions.append("{}{}'{}'"
-        .format(key, operator, value))
+        for key, value, operator in filter:
+            conditions.append("{}{}'{}'"
+                              .format(key, operator, value))
 
-    query.append("WHERE")
-    query.append(' AND '.join(conditions))
+        query.append("WHERE")
+        query.append(' AND '.join(conditions))
 
-  cursor.execute(' '.join(query))
+    cursor.execute(' '.join(query))
 
-  return cursor
+    out=cursor.fetchall()
+    print(query)
 
+    return out
