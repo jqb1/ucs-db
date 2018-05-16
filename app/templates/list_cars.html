@@ -9,7 +9,7 @@
 {% endif %}
 
 {% for car in cars_data %}
-    <li>{{ car }}</li>
+    <li> Brand:{{ car["brand"]}}, Model:{{ car["model"]}}, Mileage:{{ car["mileage"]}}, Year: {{ car["year"]}}, Price:{{ car["price"]}}</li>
 {% endfor %}
 
 {% endblock %}

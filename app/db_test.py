@@ -10,4 +10,5 @@ def get_cars(brand):
     else:
         cars = db.fetch_cars(database)
 
+
     return cars

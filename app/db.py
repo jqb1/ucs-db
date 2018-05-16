@@ -1,6 +1,7 @@
 import MySQLdb
 
 
+
 def connect(username, password, host="35.176.206.50", db="used_cars_store"):
     return MySQLdb.connect( \
         host=host, \
@@ -22,7 +23,7 @@ def validate_user(db, username, password):
 
 
 def fetch_cars(db, filter=None):
-    cursor = db.cursor()
+    cursor = db.cursor(MySQLdb.cursors.DictCursor)
 
     query = ["SELECT * FROM car"]
 
@@ -39,6 +40,7 @@ def fetch_cars(db, filter=None):
     cursor.execute(' '.join(query))
 
     out=cursor.fetchall()
-    print(query)
+    print(out)
+
 
     return out
