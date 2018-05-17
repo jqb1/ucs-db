@@ -2,14 +2,20 @@
 
 {% block content %}
 
-{% if brand %}
-    <h1>Available {{ brand }} cars:</h1>
-{% else %}
-    <h1>All cars:</h1>
-{% endif %}
+    {% if brand %}
+        <h1>Available {{ brand }} cars:</h1>
+    {% else %}
+        <h1>All cars:</h1>
+    {% endif %}
 
-{% for car in cars_data %}
-    <li> Brand:{{ car["brand"]}}, Model:{{ car["model"]}}, Mileage:{{ car["mileage"]}}, Year: {{ car["year"]}}, Price:{{ car["price"]}}</li>
-{% endfor %}
+     {% if cars_data|length==0%}
+        <p> No {{ brand }} cars found! </p>
+     {% endif %}
+    {% for car in cars_data %}
+
+        <li> Brand:{{ car["brand"] }}, Model:{{ car["model"] }}, Mileage:{{ car["mileage"] }}, Year: {{ car["year"] }},
+            Price:{{ car["price"] }}</li>
+
+    {% endfor %}
 
 {% endblock %}

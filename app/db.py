@@ -40,7 +40,7 @@ def fetch_cars(db, filter=None):
     cursor.execute(' '.join(query))
 
     out=cursor.fetchall()
-    print(out)
+
 
 
     return out

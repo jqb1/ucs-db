@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for, render_template, request, flash,jsonify
+from flask import Flask, redirect, url_for, render_template, request, flash
 
 import db
 import db_test
@@ -25,6 +25,7 @@ def validate():
     if db.validate_user(db_handle, username, password):
         # return redirect(url_for('view'))
         return "Hello {}!".format(username)
+        #return redirect(url_for('cars_list'))
     else:
         return redirect(url_for('login'))
 
@@ -33,6 +34,7 @@ def validate():
 @app.route("/cars/<brand>")
 def cars_list(brand=None):
     cars = db_test.get_cars(brand)
+    print(len(cars))
     return render_template('list_cars.html', cars_data=cars,brand=brand)
 
 
