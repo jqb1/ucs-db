@@ -24,18 +24,21 @@ def validate():
 
     if db.validate_user(db_handle, username, password):
         # return redirect(url_for('view'))
-        return "Hello {}!".format(username)
-        #return redirect(url_for('cars_list'))
+        # return "Hello {}!".format(username)
+        return redirect(url_for('cars_list'))
     else:
         return redirect(url_for('login'))
 
 
-@app.route("/cars", methods=["GET"])
+@app.route("/cars", methods=['GET', 'POST'])
 @app.route("/cars/<brand>")
 def cars_list(brand=None):
+    if request.method == 'POST':
+        brand = request.form['brand']
+        return redirect('/cars/{}'.format(brand))
+
     cars = db_test.get_cars(brand)
-    print(len(cars))
-    return render_template('list_cars.html', cars_data=cars,brand=brand)
+    return render_template('list_cars.html', cars_data=cars, brand=brand)
 
 
 if __name__ == '__main__':

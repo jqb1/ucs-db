@@ -5,12 +5,18 @@
     {% if brand %}
         <h1>Available {{ brand }} cars:</h1>
     {% else %}
+        <form action="{{ url_for('cars_list') }}" , method="POST">
+             <div class="col-md-2">
+             <input id="textinput" name="brand" type="text" placeholder="Brand" class="form-control input-md">
+             </div>
+            <button id="singlebutton" name="singlebutton" class="btn btn-primary">Search</button>
+        </form>
         <h1>All cars:</h1>
     {% endif %}
 
-     {% if cars_data|length==0%}
+    {% if cars_data|length==0 %}
         <p> No {{ brand }} cars found! </p>
-     {% endif %}
+    {% endif %}
     {% for car in cars_data %}
 
         <li> Brand:{{ car["brand"] }}, Model:{{ car["model"] }}, Mileage:{{ car["mileage"] }}, Year: {{ car["year"] }},
