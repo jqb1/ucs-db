@@ -24,7 +24,7 @@ MYSQL_PASSWORD='admin1'
 
 MYSQL_SHARED_VOLUME='mysql_db'
 
-DOCKER_INTERNAL_NEWTWORK='lorehaven'
+DOCKER_INTERNAL_NETWORK='lorehaven'
 
 MYSQL_PORT='3306'
 FLASK_PORT='80'
@@ -44,23 +44,23 @@ docker run \
   -p "${MYSQL_PORT}":3306 \
   -d \
   --net "${DOCKER_INTERNAL_NETWORK}" \
-  --restart=always \
   --name "${MYSQL_SERVER}" \
   mariadb:10.3
 
 docker run \
   -v "${PWD}/sql":/sql \
   --net "${DOCKER_INTERNAL_NETWORK}" \
-  --rm \
+  --priviliged=true --rm \
   loreprospector/mysql-client:1.0 \
-  cat \
+  sh -c \
+  "cat \
   /sql/create_db.sql \
   /sql/init_db.sql \
   | mysql \
   -uroot \
   -p"${MYSQL_ROOT_PASSWORD}" \
   -h "${MYSQL_SERVER}.${DOCKER_INTERNAL_NETWORK}" \
-  -P 3306
+  -P 3306"
 
 docker run \
   -v "${PWD}/app":/app \ 
