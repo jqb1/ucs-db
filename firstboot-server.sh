@@ -50,7 +50,8 @@ docker run \
 docker run \
   -v "${PWD}/sql":/sql \
   --net "${DOCKER_INTERNAL_NETWORK}" \
-  --priviliged=true --rm \
+  --privileged=true \
+  --rm \
   loreprospector/mysql-client:1.0 \
   sh -c \
   "cat \
