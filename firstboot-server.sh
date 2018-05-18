@@ -45,7 +45,8 @@ docker run \
   -d \
   --net "${DOCKER_INTERNAL_NETWORK}" \
   --name "${MYSQL_SERVER}" \
-  mariadb:10.3
+  mysql:8.0.11
+# mariadb:10.3
 
 docker run \
   -v "${PWD}/sql":/sql \
@@ -68,7 +69,6 @@ docker run \
   -p "${FLASK_PORT}":80 \
   -d \
   --net "${DOCKER_INTERNAL_NETWORK}" \
-  --restart=always \
   --name "${FLASK_APP}" \
   loreprospector/flask-sql:1.0 \
   flask run \
