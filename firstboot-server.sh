@@ -3,28 +3,7 @@
 [[ "${EUID}" -ne "0" ]] \
   && { echo 'Root permisions required.' 1>&2; exit 1; }
 
-rpm -ivh http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm
-
-yum update -y
-yum install mysql-server -y
-
-systemctl start mysqld
-
-mysql -u root < ./sql/clean_mysql.sql
-mysql -u root < ./sql/create_db.sql
-# mysql -u root < ./sql/init_db.sql
-
-MYSQL_ROOT_PASSWORD=admin1
-
-mysql -u root -e "$(cat << END
-CREATE USER 'root'@'%' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';
-GRANT ALL PRIVILEGES ON *.* TO 'root'@'%';
-UPDATE mysql.user SET Password=PASSWORD('${MYSQL_ROOT_PASSWORD}') WHERE User='root';
-FLUSH PRIVILEGES
-END
-)"
-
-cat << 'END' > /etc/yum.repos.d/centos.repo
+cat  << 'END' > /etc/yum.repos.d/centos.repo
 [CentOS-extras]
 name=CentOS-7-Extras
 mirrorlist=http://mirrorlist.centos.org/?release=7&arch=$basearch&repo=extras&infra=$infra
@@ -33,11 +12,64 @@ gpgcheck=0
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
 END
 
+yum update -y
 yum install docker -y
 
-#docker build -t sql ./sql
-#docker run -p 3306:3306 -d sql
+systemctl start docker
 
-docker build -t app ./app # 500Mb
-docker run -p 7777:80 -d -v ${PWD}/app:/app app
+MYSQL_ROOT_PASSWORD='bazdan1'
+MYSQL_DATABASE='used_cars_store'
+MYSQL_USER='captain_mysql'
+MYSQL_PASSWORD='admin1'
 
+MYSQL_SHARED_VOLUME='mysql_db'
+
+DOCKER_INTERNAL_NEWTWORK='lorehaven'
+
+MYSQL_PORT='3306'
+FLASK_PORT='80'
+
+MYSQL_SERVER='mysql'
+FLASK_APP='gate'
+
+docker volume create "${MYSQL_SHARED_VOLUME}"
+docker network create "${DOCKER_INTERNAL_NETWORK}"
+
+docker run \
+  -e MYSQL_ROOT_PASSWORD="${MYSQL_ROOT_PASSWORD}" \
+  -e MYSQL_DATABASE="${MYSQL_DATABASE}" \
+  -e MYSQL_USER="${MYSQL_USER}" \
+  -e MYSQL_PASSWORD="${MYSQL_PASSWORD}" \
+  -v "${MYSQL_SHARED_VOLUME}":/var/lib/mysql \
+  -p "${MYSQL_PORT}":3306 \
+  -d \
+  --net "${DOCKER_INTERNAL_NETWORK}" \
+  --restart=always \
+  --name "${MYSQL_SERVER}" \
+  mariadb:10.3
+
+docker run \
+  -v "${PWD}/sql":/sql \
+  --net "${DOCKER_INTERNAL_NETWORK}" \
+  --rm \
+  loreprospector/mysql-client:1.0 \
+  cat \
+  /sql/create_db.sql \
+  /sql/init_db.sql \
+  | mysql \
+  -uroot \
+  -p"${MYSQL_ROOT_PASSWORD}" \
+  -h "${MYSQL_SERVER}.${DOCKER_INTERNAL_NETWORK}" \
+  -P 3306
+
+docker run \
+  -v "${PWD}/app":/app \ 
+  -p "${FLASK_PORT}":80 \
+  -d \
+  --net "${DOCKER_INTERNAL_NETWORK}" \
+  --restart=always \
+  --name "${FLASK_APP}" \
+  loreprospector/flask-sql:1.0 \
+  flask run \
+  --host=0.0.0.0 \
+  --port=80
