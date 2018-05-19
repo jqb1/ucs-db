@@ -2,7 +2,7 @@ import MySQLdb
 
 
 
-def connect(username, password, host="35.176.206.50", db="used_cars_store"):
+def connect(username, password, host="18.130.68.97", db="used_cars_store"):
     return MySQLdb.connect( \
         host=host, \
         user=username, \

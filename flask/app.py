@@ -4,7 +4,7 @@ import db
 import db_test
 
 app = Flask(__name__)
-db_handle = db.connect(username='koziol', password='admin1')
+db_handle = db.connect(username='root', password='bazdan#20')
 
 
 @app.route("/")
