@@ -9,5 +9,4 @@ SQL_SERVER='18.130.68.97'
 echo "${SQL_SERVER} sql" >> /etc/hosts
 
 echo 'To connect to the database, use: mysql -u username -p -h sql.'
-echo 'To init database, use: mysql -u username -p -h sql < ./mysql/init-db.sql'
 
