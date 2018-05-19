@@ -37,6 +37,8 @@ docker run \
 -d \
 mysql:5.7
 
+sleep 10
+
 docker run \
 -e USER='root' \
 -e PASSWORD="${MYSQL_ROOT_PASSWORD}" \
