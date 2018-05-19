@@ -2,7 +2,7 @@ import db
 
 
 def get_cars(brand):
-    database = db.connect("koziol", "admin1")
+    database = db.connect("root", "bazdan#20")
 
     filter = [('brand', brand, '=')]
     if brand is not None:
