@@ -21,9 +21,9 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: 'bazdan#20'
 
-  volumes:
-    db-volume:
+volumes:
+  db-volume:
 
-  networks:
-    internal:
+networks:
+  internal:
 
