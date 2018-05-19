@@ -8,8 +8,8 @@ apt-get install -y docker-compose
 
 service docker restart
 
-docker compose-up up -d
+docker-compose up -d
 
-docker run --priviliged=true -v ./mysql:/sql -d theredfoxlee/mysql-client:1.0 \
+docker run --privileged=true -v ./mysql:/sql -d theredfoxlee/mysql-client:1.0 \
   sh -c "mysql -uroot -pbazdan#20 < /sql/init-db.sql"
 

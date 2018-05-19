@@ -4,7 +4,7 @@ services:
   website:
     image: theredfoxlee/flask:1.0
     volumes:
-      - ./app:/app
+      - ./flask:/app
     networks:
       - internal
     ports:
@@ -26,4 +26,5 @@ volumes:
 
 networks:
   internal:
+    name: internal
 
