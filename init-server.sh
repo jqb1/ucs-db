@@ -43,7 +43,6 @@ docker run \
 -e HOST="${MYSQL}" \
 -v "${PWD}/mysql":/sql \
 --network="${INTERNAL_NETWORK}" \
---rm \
 -d \
 theredfoxlee/mysql-exec:1.0
 
