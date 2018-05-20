@@ -1,5 +1,4 @@
-CREATE DATABASE used_cars_store;
-
+CREATE DATABASE 'used_cars_store';
 USE used_cars_store;
 
 CREATE TABLE car(id smallint not null auto_increment,

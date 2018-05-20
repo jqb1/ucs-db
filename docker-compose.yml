@@ -5,6 +5,7 @@ services:
     image: mysql:5.7
     volumes:
       - db-volume:/var/lib/mysql
+      - ./mysql:/docker-entrypoint-initdb.d
     networks:
       - internal
     ports:
@@ -12,7 +13,6 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: 'bazdan#20'
-      MYSQL_DATABASE: 'used_cars_store'
   website:
     image: theredfoxlee/flask:1.0
     volumes:
