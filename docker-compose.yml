@@ -1,0 +1,31 @@
+version: '2'
+
+services:
+  database:
+    image: mysql:5.7
+    volumes:
+      - db-volume:/var/lib/mysql
+    networks:
+      - internal
+    ports:
+      - 3306:3306
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 'bazdan#20'
+      MYSQL_DATABASE: 'used_cars_store'
+  website:
+    image: theredfoxlee/flask:1.0
+    volumes:
+      - ./flask:/app
+    networks:
+      - internal
+    ports:
+      - 80:80
+    depends_on:
+      - database
+
+volumes:
+  db-volume:
+
+networks:
+  internal:
