@@ -1,10 +1,17 @@
-from flask import Flask, redirect, url_for, render_template, request, flash
+from flask import \
+  Flask, \
+  redirect, \
+  url_for, \
+  render_template, \
+  request, \
+  flash
 
 import db
 import db_test
 
 app = Flask(__name__)
-db_handle = db.connect(username='root', password='bazdan#20')
+db_handle = db.connect(username='root', \
+  password='bazdan#20')
 
 
 @app.route("/")
@@ -38,7 +45,8 @@ def cars_list(brand=None):
     return redirect('/cars/{}'.format(brand))
 
   cars = db_test.get_cars(brand)
-  return render_template('list_cars.html', cars_data=cars, brand=brand)
+  return render_template('list_cars.html', \
+    cars_data=cars, brand=brand)
 
 
 if __name__ == '__main__':

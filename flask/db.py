@@ -1,11 +1,13 @@
 import MySQLdb
 import time
+import sys
 
 def connect(username, password, host="database", db="used_cars_store", counter=5):
   try:
     handle = MySQLdb.connect(host=host, user=username, passwd=password, db=db)
   except:
     if counter > 0:
+      print >> sys.stderr, "MySQLdb.connect failed. Reconnecting after a while.."
       time.sleep(5)
       handle = connect(username, password, host, db, counter - 1)
     else:
