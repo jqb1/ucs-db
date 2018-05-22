@@ -27,6 +27,18 @@ def validate_user(db, username, password):
   return out[0] != 0
 
 
+def fetch_user(db, username):
+  cursor = db.cursor(MySQLdb.cursors.DictCursor)
+  
+  query = ("SELECT * FROM account " +
+           "JOIN card ON account.card_id=card.id " +
+           "WHERE username='{}'".format(username))
+  
+  cursor.execute(query)
+  out = cursor.fetchone()
+
+  return out
+
 def fetch_cars(db, filter=None):
   cursor = db.cursor(MySQLdb.cursors.DictCursor)
 

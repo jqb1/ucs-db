@@ -34,6 +34,7 @@ def validate():
   password = request.form['password']
 
   if db.validate_user(db_handle, username, password):
+    global CURRENT_USER
     CURRENT_USER = username
     return redirect(url_for('view'))
   else:
@@ -42,9 +43,13 @@ def validate():
 
 @app.route("/view", methods=['GET', 'POST'])
 def view():
-  cars = db.fetch_cars(db_handle)
-  return render_template('view.html', \
-    cars=cars, user=CURRENT_USER)
+  if CURRENT_USER != 'Unknown':
+    cars = db.fetch_cars(db_handle)
+    user = db.fetch_user(db_handle, CURRENT_USER)
+    return render_template('view.html', \
+      cars=cars, user=user)
+  else:
+    return redirect(url_for('login'))
 
 
 @app.route("/filter", methods=['POST'])
