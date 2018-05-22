@@ -30,12 +30,18 @@ def validate():
   password = request.form['password']
 
   if db.validate_user(db_handle, username, password):
-    # return redirect(url_for('view'))
+    #return render_template('view.html')
     # return "Hello {}!".format(username)
-    return redirect(url_for('cars_list'))
+    return redirect(url_for('view'))
   else:
     return redirect(url_for('login'))
 
+@app.route("/view", methods=['GET', 'POST'])
+def view():
+  cars = db.fetch_cars(db_handle) 
+  print(cars)
+  return render_template('view.html', \
+    cars=cars)
 
 @app.route("/cars", methods=['GET', 'POST'])
 @app.route("/cars/<brand>")
@@ -50,5 +56,5 @@ def cars_list(brand=None):
 
 
 if __name__ == '__main__':
-  app.run(host="0.0.0.0", port="80")
+  app.run(host="localhost", port="80", debug=True)
 
