@@ -27,7 +27,8 @@
           <a class="navbar-brand" href="#">Used Cars Store</a>
         </div>
         <ul class="nav navbar-nav navbar-right">
-          <li class="active"><a href="#">Balance: 200$</a></li>
+          <li>Hello {{ account["username"] }}!</li>
+          <li class="active"><a href="#">Balance: {{ account["balance"] }}$</a></li>
         </ul>
       </div>
     </nav>
