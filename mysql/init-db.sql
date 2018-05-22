@@ -5,7 +5,7 @@ CREATE TABLE car(id smallint not null auto_increment,
 brand varchar(20) not null,
 model varchar(30) not null,
 mileage int unsigned not null,
-year date not null,
+year int(4) not null,
 price float not null,
 img varchar(50) not null,
 primary key(id));
