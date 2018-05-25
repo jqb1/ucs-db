@@ -1,21 +1,15 @@
-from flask import \
-  Flask, \
-  redirect, \
-  url_for, \
-  render_template, \
-  request
+from flask import Flask, redirect, url_for, render_template, request, session
+from db_handle import DBHandle
+from db import validate_user, fetch_user, fetch_cars
 
-
-import db
-
-
-# Temporary solution. 
-# We'll use flask session later.
-CURRENT_USER = 'Unknown'
 
 app = Flask(__name__)
-db_handle = db.connect(username='root', \
-  password='bazdan#20')
+db_handle = DBHandle(username='root', password='bazdan#20',
+                     database='used_cars_store',
+                     hostname='35.176.188.105', port='3306')
+
+
+app.secret_key = b'\xd7\xedc\xe0Rh|R\xe5Z\x82\xc1w\x00\xfe%'
 
 
 @app.route("/")
@@ -25,7 +19,16 @@ def home():
 
 @app.route("/login")
 def login():
-  return render_template('login.html')
+  if 'username' in session:
+    return redirect(url_for('view'))
+  else:
+    return render_template('login.html')
+
+
+@app.route("/logout")
+def logout():
+  session.pop('username', None)
+  return redirect(url_for('login'))
 
 
 @app.route("/validate", methods=['POST'])
@@ -33,9 +36,8 @@ def validate():
   username = request.form['username']
   password = request.form['password']
 
-  if db.validate_user(db_handle, username, password):
-    global CURRENT_USER
-    CURRENT_USER = username
+  if validate_user(db_handle, username, password):
+    session['username'] = username
     return redirect(url_for('view'))
   else:
     return redirect(url_for('login'))
@@ -43,11 +45,10 @@ def validate():
 
 @app.route("/view", methods=['GET', 'POST'])
 def view():
-  if CURRENT_USER != 'Unknown':
-    cars = db.fetch_cars(db_handle)
-    user = db.fetch_user(db_handle, CURRENT_USER)
-    return render_template('view.html', \
-      cars=cars, user=user)
+  if 'username' in session:
+    cars = fetch_cars(db_handle)
+    user = fetch_user(db_handle, session['username'])
+    return render_template('view.html', cars=cars, user=user)
   else:
     return redirect(url_for('login'))
 
@@ -65,10 +66,9 @@ def filter():
 
 
 if __name__ == '__main__':
-  app.run(host="0.0.0.0", port="80")
+  app.run(host="localhost", port="5000", debug=True)
   # If you want to test it locally, go with
   # app.run(host="localhost", port="80", debug=True)
   # and change database host above to server's IP
   # eg. db.connect(username='root', \
   # password='bazdan#20', host='182.321.142.999')
-
