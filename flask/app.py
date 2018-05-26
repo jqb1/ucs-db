@@ -53,6 +53,16 @@ def view():
     return redirect(url_for('login'))
 
 
+@app.route("/admin_view", methods=['GET', 'POST'])
+def admin_view():
+  if 'username' in session:
+    user = fetch_user(db_handle, session['username'])
+    if user['privilege'] == 'admin':
+      return render_template('admin_view.html', user=user)  
+  return redirect(url_for('view'))
+
+
+
 @app.route("/filter", methods=['POST'])
 def filter():
   # Filter form handler for view.html.

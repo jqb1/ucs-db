@@ -15,6 +15,11 @@
         <div class="navbar-header">
           <a class="navbar-brand" href="#">Used Cars Store</a>
         </div>
+        <ul class="nav navbar-nav">
+          {% if user["privilege"] == 'admin' %}
+          <li><a href="{{ url_for('admin_view') }}">Admin View</a></li>
+          {% endif %}
+        </ul>
         <ul class="nav navbar-nav navbar-right">
           <li><a href="#">Hello {{ user["username"] }}!</a></li>
           <li class="active"><a href="#">Balance: {{ user["balance"] }}$</a></li>
@@ -64,7 +69,7 @@
               </div>
               <div class="media-body">
                 <h4 class="media-heading">{{ car["brand"] }} {{ car["model"] }}</h4>
-                <table class="table borderless">
+                <table class="table">
                   <tbody>
                     <tr>
                       <td>Brand: {{ car["brand"] }}</td>
