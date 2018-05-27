@@ -1,0 +1,64 @@
+{% extends "admin.html" %}
+
+
+{% block subcontent %}
+<div class="list-group">
+  {% for username in usernames %}
+    <a href="{{ url_for('users', username=username, page=page) }}" class="list-group-item list-group-item-action">{{ username }}</a>
+  {% endfor %}
+</div>
+<div class="text-center">
+  <ul class="pagination justify-content-center">
+    {% for p in pages %}
+      <li class="page-item"><a class="page-link" href="{{ url_for('users', username=account_info['username'], page=p) }}">{{ p }}</a></li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}
+
+{% block content %}
+    {% if account_info %}
+    <div class="row well">
+      <table class="table">
+        <thead>
+          <th scope="col">username</th>
+          <th scope="col">password</th>
+          <th scope="col">creation_date</th>
+          <th scope="col">last_visit</th>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ account_info['username'] }}</td>
+            <td>{{ account_info['password'] }}</td>
+            <td>{{ account_info['creation_date'] }}</td>
+            <td>{{ account_info['last_visit'] }}</td>
+          </tr>
+        </tbody>
+        <thead>
+          <th scope="col">name</th>
+          <th scope="col">surname</th>
+          <th scope="col">email</th>
+          <th scope="col">phone</th>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ account_info['name'] }}</td>
+            <td>{{ account_info['surname'] }}</td>
+            <td>{{ account_info['email'] }}</td>
+            <td>{{ account_info['phone'] }}</td>
+          </tr>
+        </tbody>
+        <thead>
+          <th scope="col">card number</th>
+          <th scope="col">balance</th>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ account_info['card_number'] }}</td>
+            <td>{{ account_info['balance'] }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
+{% endblock %}

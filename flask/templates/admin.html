@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+  <meta charset="utf-8">
+  <title>UCStore</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/general.css') }}">
+</head>
+<body>
+
+  <!-- navbar conatiner -->
+  <div class="container">
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="{{ url_for('admin') }}">Used Cars Store</a>
+        </div>
+        <ul class="nav navbar-nav">
+          <li><a href="{{ url_for('store') }}">View</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="#">Hello {{ account['username'] }}!</a></li>
+          <li class="active"><a href="#">Balance: {{ account['balance'] }}$</a></li>
+          <li><a href="{{ url_for('logout') }}">Logout</a></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+  <!-- ./container -->
+
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-3">
+        <div class="list-group">
+          <a href="{{ url_for('users') }}" class="list-group-item list-group-item-action">Users info</a>
+          <a href="{{ url_for('activity') }}" class="list-group-item list-group-item-action">Activity</a>
+        </div>
+        {% block subcontent %}
+        {% endblock %}
+      </div>
+      <div class="col-lg-9">
+        {% block content %}
+        {% endblock %}
+      </div>
+    </div>
+    </div>
+  </div>
+
+</body>
+</html>
+
