@@ -38,7 +38,7 @@ def login():
     return render_template('login.html')
 
 
-@app.route('/view')
+@app.route('/store')
 def store():
   if 'account' in session:
     cars = fetch_cars(db)
