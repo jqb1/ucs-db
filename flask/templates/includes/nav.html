@@ -1,0 +1,19 @@
+<div class="container">
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">Used Cars Store</a>
+        </div>
+        <ul class="nav navbar-nav">
+          {% if account['privilege'] == 'admin' %}
+          <li><a href="{{ url_for('admin') }}">Admin View</a></li>
+          {% endif %}
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="#">Hello {{ account['username'] }}!</a></li>
+          <li class="active"><a href="#">Balance: {{ account["balance"] }}$</a></li>
+          <li><a href="{{ url_for('logout') }}">Logout</a></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
