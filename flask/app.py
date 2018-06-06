@@ -9,7 +9,8 @@ from db_handle import \
     DB
 
 from helpers import \
-    pagination
+    pagination,\
+    pagination_with_filter
 from mysql_fetch import \
     fetch_account, \
     fetch_usernames, \
@@ -52,9 +53,6 @@ def store(page):
         brands_unique = set(brands)
 
         if request.method == 'POST':
-            # results_per_page = 3
-            # start_at = (page - 1) * results_per_page
-            #
 
             current_filtration.clear()
 
@@ -70,23 +68,11 @@ def store(page):
                 # if form field is not empty
                 if condition[1] != '':
                     current_filtration.append(condition)
-            # if len(out_filter) == 0:
-            #     cars = fetch_cars(db, start_at, results_per_page)
-            #     if len(cars) == 0:
-            #         page = -1
-            # else:
-            #     cars = fetch_cars(db, start_at, results_per_page, out_filter)
-            #     if len(cars) == 0:
-            #         page = -1
-            # if page+1==0:
-            #     page=0
+
             if len(current_filtration) != 0:
                 return redirect(url_for('store_detail'))
             else:
                 return redirect(url_for('store'))
-                # return render_template('store.html', cars=cars, brands=brands_unique, account=session['account'], page=page + 1)
-
-                # return redirect('/cars/{}'.format(brand))
 
         if request.method == 'GET':
             current_filtration.clear()

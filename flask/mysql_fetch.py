@@ -67,31 +67,45 @@ def fetch_no_rows(db, table):
     return db.query(query).fetchone()['n']
 
 
-def fetch_column(db, column,table):
+def fetch_column(db, column, table):
     query = "SELECT {} FROM {}".format(column, table)
     out = db.query(query).fetchall()
-    values=[]
+    values = []
     for i in out:
         values.append(i[column])
 
     return values
 
-def fetch_cars(db,start_at,per_page, filter=None):
+
+# def fetch_cars(db, start_at, per_page, filter=None):
+#     query = ["SELECT * FROM car "]
+#
+#     if filter != None:
+#         conditions = []
+#
+#         for key, value, operator in filter:
+#             conditions.append("{}{}'{}'"
+#                               .format(key, operator, value))
+#
+#         query.append("WHERE")
+#         query.append(' AND '.join(conditions))
+#
+#     query.append("LIMIT {},{}".format(start_at, per_page))
+#
+#     return db.query(' '.join(query)).fetchall()
 
 
-  query = ["SELECT * FROM car "]
+def count_cars(db, filter):
+    query = ["SELECT COUNT(*) AS n FROM car "]
 
-  if filter != None:
-    conditions = []
+    if filter != None:
+        conditions = []
 
-    for key, value, operator in filter:
-      conditions.append("{}{}'{}'"
-        .format(key, operator, value))
+        for key, value, operator in filter:
+            conditions.append("{}{}'{}'"
+                              .format(key, operator, value))
 
-    query.append("WHERE")
-    query.append(' AND '.join(conditions))
+        query.append("WHERE")
+        query.append(' AND '.join(conditions))
 
-  query.append("LIMIT {},{}".format(start_at,per_page))
-
-  return db.query(' '.join(query)).fetchall()
-
+    return db.query(query).fetchone()['n']
