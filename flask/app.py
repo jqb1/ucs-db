@@ -25,6 +25,9 @@ db = DB(username='root',
 app.secret_key = \
     b'\xd7\xedc\xe0Rh|R\xe5Z\x82\xc1w\x00\xfe%'
 
+# global variable for
+current_filtration = []
+
 
 @app.route('/')
 def home():
@@ -49,9 +52,11 @@ def store(page):
         brands_unique = set(brands)
 
         if request.method == 'POST':
+            # results_per_page = 3
+            # start_at = (page - 1) * results_per_page
+            #
 
-            results_per_page = 3
-            start_at = (page - 1) * results_per_page
+            current_filtration.clear()
 
             brand = request.form['brand']
             year = request.form['year']
@@ -61,37 +66,66 @@ def store(page):
             filter = [('price', min_price, '>='), ('price', max_price, '<='), ('year', year, '>='),
                       ('brand', brand, '=')]
 
-            out_filter = []
             for condition in filter:
                 # if form field is not empty
                 if condition[1] != '':
-                    out_filter.append(condition)
-            if len(out_filter) == 0:
-                cars = fetch_cars(db, start_at, results_per_page)
-                if len(cars) == 0:
-                    page = -1
+                    current_filtration.append(condition)
+            # if len(out_filter) == 0:
+            #     cars = fetch_cars(db, start_at, results_per_page)
+            #     if len(cars) == 0:
+            #         page = -1
+            # else:
+            #     cars = fetch_cars(db, start_at, results_per_page, out_filter)
+            #     if len(cars) == 0:
+            #         page = -1
+            # if page+1==0:
+            #     page=0
+            if len(current_filtration) != 0:
+                return redirect(url_for('store_detail'))
             else:
-                cars = fetch_cars(db, start_at, results_per_page, out_filter)
-                if len(cars) == 0:
-                    page = -1
-            if page+1==0:
-                page=0
-            return render_template('store.html', cars=cars, brands=brands_unique, account=session['account'], page=page + 1)
+                return redirect(url_for('store'))
+                # return render_template('store.html', cars=cars, brands=brands_unique, account=session['account'], page=page + 1)
 
-            # return redirect('/cars/{}'.format(brand))
+                # return redirect('/cars/{}'.format(brand))
 
         if request.method == 'GET':
+            current_filtration.clear()
+
             results_per_page = 3
             start_at = (page - 1) * results_per_page
             cars = fetch_cars(db, start_at, results_per_page)
             if len(cars) == 0:
                 page = -1
-            if page+1==0:
-                page=0
-            return render_template('store.html', cars=cars, brands=brands_unique, account=session['account'], page=page + 1)
+            if page + 1 == 0:
+                page = 0
+            return render_template('store.html', cars=cars, brands=brands_unique, account=session['account'],
+                                   page=page + 1)
 
     else:
         return redirect(url_for('login'))
+
+
+@app.route('/store/detail', defaults={'page': 1}, methods=['GET'])
+@app.route('/store/detail/<int:page>', methods=['GET'])
+def store_detail(page):
+    if request.method == 'GET':
+        brands = fetch_column(db, 'brand', 'car')
+        brands_unique = set(brands)
+
+        results_per_page = 3
+        start_at = (page - 1) * results_per_page
+
+        if len(current_filtration) == 0:
+            return redirect(url_for('store'))
+
+        else:
+            cars = fetch_cars(db, start_at, results_per_page, current_filtration)
+            if len(cars) == 0:
+                page = -1
+        if page + 1 == 0:
+            page = 0
+        return render_template('store_detail.html', cars=cars, brands=brands_unique, account=session['account'],
+                               page=page + 1)
 
 
 @app.route('/admin')
