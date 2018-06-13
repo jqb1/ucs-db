@@ -4,7 +4,7 @@ services:
   database:
     image: mysql:5.7
     volumes:
-      - db-volume:/var/lib/mysql
+      - db-volume2:/var/lib/mysql
       - ./mysql:/docker-entrypoint-initdb.d
     networks:
       - internal
@@ -25,7 +25,7 @@ services:
       - database
 
 volumes:
-  db-volume:
+  db-volume2:
 
 networks:
   internal:

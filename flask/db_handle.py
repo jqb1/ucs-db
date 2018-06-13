@@ -17,10 +17,12 @@ class DB:
     self.conn = MySQLdb.connect(user=self.username, 
       passwd=self.password, db=self.database, host=self.hostname)
 
-  def query(self, sql):
+  def query(self, sql, update=None):
     try:
       cursor = self.conn.cursor(MySQLdb.cursors.DictCursor)
       cursor.execute(sql)
+      if update:
+        cursor.commit()
     except (AttributeError, MySQLdb.OperationalError):
       self.connect()
       cursor = self.conn.cursor(MySQLdb.cursors.DictCursor)

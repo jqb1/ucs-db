@@ -14,7 +14,8 @@ def fetch_account(db, username, verbose=False):
                    'phone',
                    'number AS card_number']
     else:
-        columns = ['username',
+        columns = ['a.id',
+                   'username',
                    'password',
                    'privilege',
                    'balance']
@@ -77,26 +78,8 @@ def fetch_column(db, column, table):
     return values
 
 
-# def fetch_cars(db, start_at, per_page, filter=None):
-#     query = ["SELECT * FROM car "]
-#
-#     if filter != None:
-#         conditions = []
-#
-#         for key, value, operator in filter:
-#             conditions.append("{}{}'{}'"
-#                               .format(key, operator, value))
-#
-#         query.append("WHERE")
-#         query.append(' AND '.join(conditions))
-#
-#     query.append("LIMIT {},{}".format(start_at, per_page))
-#
-#     return db.query(' '.join(query)).fetchall()
-
-
-def count_cars(db, filter):
-    query = ["SELECT COUNT(*) AS n FROM car "]
+def fetch_cars(db, start_at, per_page, filter=None):
+    query = ["SELECT * FROM car "]
 
     if filter != None:
         conditions = []
@@ -108,4 +91,40 @@ def count_cars(db, filter):
         query.append("WHERE")
         query.append(' AND '.join(conditions))
 
-    return db.query(query).fetchone()['n']
+    query.append("LIMIT {},{}".format(start_at, per_page))
+
+    return db.query(' '.join(query)).fetchall()
+
+
+def count_with_filter(db, filter=None):
+    query = ["SELECT COUNT(*) AS n FROM car "]
+
+    if filter is not None:
+        conditions = []
+
+        for key, value, operator in filter:
+            conditions.append("{}{}'{}'"
+                              .format(key, operator, value))
+
+        query.append("WHERE")
+        query.append(' AND '.join(conditions))
+
+    return db.query(' '.join(query)).fetchone()['n']
+
+
+def handle_buy(db, car_id, account_id):
+    card = ' SELECT card_id FROM account WHERE id={}'.format(account_id)
+    card_id = db.query(card)
+    balance = 'SELECT balance from card WHERE id={}'.format(car_id)
+    curr_balance = db.query(balance)
+    methods = []
+    methods.append(
+        ' UPDATE card'
+        ' SET balance={} - (SELECT price FROM car where id={})'
+        ' WHERE id={}'.format(curr_balance, car_id, card_id))
+    methods.append('INSERT INTO transaction(account_id, car_id, execution_date)'
+                   'VALUES({}, {}, CURDATE())'.format(account_id, car_id))
+    methods.append('UPDATE car SET status="sold_out" WHERE id={}'.format(car_id))
+
+    for method in methods:
+        db.query(method, true)

@@ -9,20 +9,21 @@ from db_handle import \
     DB
 
 from helpers import \
-    pagination,\
-    pagination_with_filter
+    pagination, \
+    count_cars
 from mysql_fetch import \
     fetch_account, \
     fetch_usernames, \
     fetch_transactions, \
     fetch_cars, \
-    fetch_column
+    fetch_column, \
+    handle_buy
 
 app = Flask(__name__)
 db = DB(username='root',
         password='bazdan#20',
         database='used_cars_store',
-        hostname='35.176.188.105')
+        hostname='127.0.0.1')
 app.secret_key = \
     b'\xd7\xedc\xe0Rh|R\xe5Z\x82\xc1w\x00\xfe%'
 
@@ -54,7 +55,7 @@ def store(page):
 
         if request.method == 'POST':
 
-            current_filtration.clear()
+
 
             brand = request.form['brand']
             year = request.form['year']
@@ -75,17 +76,15 @@ def store(page):
                 return redirect(url_for('store'))
 
         if request.method == 'GET':
-            current_filtration.clear()
+
 
             results_per_page = 3
             start_at = (page - 1) * results_per_page
             cars = fetch_cars(db, start_at, results_per_page)
-            if len(cars) == 0:
-                page = -1
-            if page + 1 == 0:
-                page = 0
+            max_page = count_cars(db, results_per_page)
+            print(int(max_page))
             return render_template('store.html', cars=cars, brands=brands_unique, account=session['account'],
-                                   page=page + 1)
+                                   pages=range(1, int(max_page)))
 
     else:
         return redirect(url_for('login'))
@@ -106,12 +105,17 @@ def store_detail(page):
 
         else:
             cars = fetch_cars(db, start_at, results_per_page, current_filtration)
-            if len(cars) == 0:
-                page = -1
-        if page + 1 == 0:
-            page = 0
+            max_page = count_cars(db, results_per_page, current_filtration)
         return render_template('store_detail.html', cars=cars, brands=brands_unique, account=session['account'],
-                               page=page + 1)
+                               pages=range(1, int(max_page)))
+
+
+@app.route('/buy/<int:car_id>')
+def buy_it(car_id):
+    print(session['account'])
+    # handle_buy(db,car_id,session['account']['id'])
+
+    return render_template('buy.html', account=session['account'] )
 
 
 @app.route('/admin')
@@ -192,4 +196,4 @@ def validate():
 
 
 if __name__ == '__main__':
-    app.run(host='localhost', port='5000', debug=True)
+    app.run(host='localhost', port='80', debug=True)

@@ -55,6 +55,7 @@
 
                     {% endif %}
                     {% for car in cars %}
+                        {% if car["status"]=="available" %}
                         <li class="media well">
                             <div class="media-left">
                                 <a href="#">
@@ -76,19 +77,25 @@
                                     <tr>
                                         <td>Price: {{ car['price'] }}</td>
                                         <td>
-                                            <button type="submit" class="btn btn-default">Buy it!</button>
+                                            <button type="submit" class="btn btn-default"><a href="{{  url_for('buy_it',car_id=car["id"] )}}">Buy it!</a></button>
                                         </td>
                                     </tr>
                                     </tbody>
                                 </table>
                             </div>
                         </li>
+                        {% endif %}
                     {% endfor %}
                 </ul>
-                <ul class="pager">
-
-                    <li><a href="/store/{{ page }}">Next</a></li>
-                </ul>
+                <div class="text-center">
+                    <ul class="pagination justify-content-center">
+                        {% for p in pages %}
+                            <li class="page-item"><a class="page-link"
+                                                     href="{{ url_for('store', page=p) }}">{{ p }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
