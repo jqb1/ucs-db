@@ -55,7 +55,7 @@ def store(page):
 
         if request.method == 'POST':
 
-
+            del current_filtration[:]
 
             brand = request.form['brand']
             year = request.form['year']
@@ -76,15 +76,16 @@ def store(page):
                 return redirect(url_for('store'))
 
         if request.method == 'GET':
-
+            del current_filtration[:]
 
             results_per_page = 3
             start_at = (page - 1) * results_per_page
             cars = fetch_cars(db, start_at, results_per_page)
             max_page = count_cars(db, results_per_page)
-            print(int(max_page))
+
+
             return render_template('store.html', cars=cars, brands=brands_unique, account=session['account'],
-                                   pages=range(1, int(max_page)))
+                                   pages=range(1, int(max_page)+1))
 
     else:
         return redirect(url_for('login'))
@@ -106,14 +107,15 @@ def store_detail(page):
         else:
             cars = fetch_cars(db, start_at, results_per_page, current_filtration)
             max_page = count_cars(db, results_per_page, current_filtration)
+
         return render_template('store_detail.html', cars=cars, brands=brands_unique, account=session['account'],
-                               pages=range(1, int(max_page)))
+                               pages=range(1, int(max_page)+1))
 
 
 @app.route('/buy/<int:car_id>')
 def buy_it(car_id):
-    print(session['account'])
-    # handle_buy(db,car_id,session['account']['id'])
+    print(car_id)
+    handle_buy(db,car_id,session['account']['id'])
 
     return render_template('buy.html', account=session['account'] )
 

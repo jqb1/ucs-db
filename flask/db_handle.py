@@ -22,7 +22,7 @@ class DB:
       cursor = self.conn.cursor(MySQLdb.cursors.DictCursor)
       cursor.execute(sql)
       if update:
-        cursor.commit()
+        self.conn.commit()
     except (AttributeError, MySQLdb.OperationalError):
       self.connect()
       cursor = self.conn.cursor(MySQLdb.cursors.DictCursor)
