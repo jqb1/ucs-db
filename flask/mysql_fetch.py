@@ -88,11 +88,13 @@ def fetch_cars(db, start_at, per_page, filter=None):
             conditions.append("{}{}'{}'"
                               .format(key, operator, value))
 
+        conditions.append("status='available'")
         query.append("WHERE")
         query.append(' AND '.join(conditions))
 
+    else:
+        query.append("WHERE status='available'")
     query.append("LIMIT {},{}".format(start_at, per_page))
-
     return db.query(' '.join(query)).fetchall()
 
 
@@ -106,8 +108,12 @@ def count_with_filter(db, filter=None):
             conditions.append("{}{}'{}'"
                               .format(key, operator, value))
 
+        conditions.append("status='available'")
         query.append("WHERE")
+
         query.append(' AND '.join(conditions))
+    else:
+        query.append("WHERE status='available'")
 
     return db.query(' '.join(query)).fetchone()['n']
 
@@ -134,3 +140,5 @@ def handle_buy(db, car_id, account_id):
 
     for method in methods:
         db.query(method, True)
+
+    return  new_balance

@@ -30,7 +30,6 @@ app.secret_key = \
 # global variable for
 current_filtration = []
 
-
 @app.route('/')
 def home():
     return redirect(url_for('login'))
@@ -78,14 +77,15 @@ def store(page):
         if request.method == 'GET':
             del current_filtration[:]
 
+            print(session['account'])
             results_per_page = 3
             start_at = (page - 1) * results_per_page
             cars = fetch_cars(db, start_at, results_per_page)
             max_page = count_cars(db, results_per_page)
-
+            print(max_page)
 
             return render_template('store.html', cars=cars, brands=brands_unique, account=session['account'],
-                                   pages=range(1, int(max_page)+1))
+                                   pages=range(1, int(max_page) + 1))
 
     else:
         return redirect(url_for('login'))
@@ -109,15 +109,17 @@ def store_detail(page):
             max_page = count_cars(db, results_per_page, current_filtration)
 
         return render_template('store_detail.html', cars=cars, brands=brands_unique, account=session['account'],
-                               pages=range(1, int(max_page)+1))
+                               pages=range(1, int(max_page) + 1))
 
 
 @app.route('/buy/<int:car_id>')
 def buy_it(car_id):
     print(car_id)
-    handle_buy(db,car_id,session['account']['id'])
-
-    return render_template('buy.html', account=session['account'] )
+    new_balance = handle_buy(db, car_id, session['account']['id'])
+    session['account']['balance'] = new_balance
+    session.update()
+    print(session['account'])
+    return render_template('buy.html', account=session['account'])
 
 
 @app.route('/admin')

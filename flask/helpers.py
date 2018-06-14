@@ -12,5 +12,5 @@ def pagination(db, page, n, table):
 
 def count_cars(db,n,filter=None):
     count=count_with_filter(db,filter)
-    max_page = ceil(count / n) + 1
+    max_page = ceil(count / n) +1
     return max_page
