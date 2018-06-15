@@ -1,4 +1,4 @@
-miter // CREATE PROCEDURE handle_buy (IN id_account INT, IN id_car INT)
+delimiter // CREATE PROCEDURE handle_buy (IN id_account INT, IN id_car INT)
 BEGIN
 
 DECLARE card_id_var INT ;
